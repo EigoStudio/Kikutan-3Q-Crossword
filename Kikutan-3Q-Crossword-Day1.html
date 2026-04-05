@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&family=Kosugi+Maru&display=swap" rel="stylesheet">
   <style>
     /* ------------------------------------------
-       1. ブラウザ表示用（一切変更なし）
+       1. ブラウザ表示用（スタイル維持）
     ------------------------------------------ */
     :root { --primary: #3498db; }
     body { 
@@ -20,7 +20,6 @@
     td { width: 30px; height: 30px; padding: 0; position: relative; }
     td.active { border: 1px solid black; background-color: white; }
     
-    /* グレーマス（ブラウザ） */
     td.gray-cell { background-color: #d1d1d1 !important; }
     td.gray-cell input { visibility: hidden; }
 
@@ -57,119 +56,23 @@
     @media print { 
       @page { size: A4 portrait; margin: 0; } 
       .no-print { display: none; } 
-      body { 
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 10mm;
-  padding-right: 0mm; /* ここで右側だけを 0.5cm に指定 */
-  
-  color: #000 !important; 
-  display: block; 
-  width: auto; 
-}
-
-      /* タイトル：左寄せ、上1.5cm、下1cm */
-     h1 { 
-  display: block !important; 
-  width: 100% !important;      /* 1. 幅を横幅いっぱいに広げる */
-  text-align: left !important;
-  margin-top: 1.5cm !important; 
-  margin-bottom: 1cm !important; 
-  margin-left: 1cm !important; /* 2. これで左に余白ができる */
-  color: #000 !important;
-  font-size: 24px;
-}
-
-/* ここに追加 */
-  table {
-    height: auto !important; /* テーブル全体の高さが無理に伸びないようにする */
-  }
-
-  td {
-    /* 幅と高さを「物理単位」で揃えることで真四角を保証 */
-    width: 8.5mm !important;  /* 30pxは約8mmですが、少し余裕を見て8.5mmくらいが書きやすいです */
-    height: 8.5mm !important; /* 幅と同じ値にする */
-    
-    /* 中の文字の位置を中央に固定 */
-    text-align: center;
-    vertical-align: middle;
-    padding: 0 !important; /* 余計な隙間を排除 */
-  }
-  
-  /* マスの中の入力欄（文字が入るところ）の調整 */
-  input {
-    /* 8.5mmの枠に収まるように文字サイズを調整 */
-    font-size: 16pt !important; /* 印刷用はpt（ポイント）が確実です */
-    height: 100% !important;
-    width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    /* ブラウザの入力欄のデフォルトスタイルを打ち消す */
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-  }
-
-      /* グレーマス設定（印刷時） */
-      td.gray-cell { 
-        background-color: #d1d1d1 !important; 
-        -webkit-print-color-adjust: exact; 
-        print-color-adjust: exact;
-      }
-
-      /* 全黒字・境界線排除 */
+      body { padding-top: 0; padding-bottom: 0; padding-left: 10mm; padding-right: 0mm; color: #000 !important; display: block; width: auto; }
+      h1 { display: block !important; width: 100% !important; text-align: left !important; margin-top: 1.5cm !important; margin-bottom: 1cm !important; margin-left: 1cm !important; color: #000 !important; font-size: 24px; }
+      table { height: auto !important; }
+      td { width: 8.5mm !important; height: 8.5mm !important; text-align: center; vertical-align: middle; padding: 0 !important; }
+      input { font-size: 16pt !important; height: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; background: transparent !important; border: none !important; outline: none !important; box-shadow: none !important; }
+      td.gray-cell { background-color: #d1d1d1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       * { color: #000 !important; border-color: #000 !important; border-left: none !important; }
       td.active { border: 0.5pt solid black !important; } 
       input { color: transparent !important; }
-
-      /* --- レイアウト切り替え用の設定 --- */
-      
-      /* パズルが18cm超の場合：リストを右に縦一列 */
-      .layout-side {
-        display: flex !important;
-        flex-direction: row !important;
-        /* 1. gap（隙間）を広げるか、justify-contentで両端に飛ばす */
-  justify-content: space-between !important;        
-  width: 100%;
-      }
-
-/* 2. クロスワード本体が潰れないように保護する設定を追加 */
-.layout-side #grid-container {
-  flex-shrink: 0 !important; /* これで盤面が圧縮されるのを防ぎます */
-}
-
-      .layout-side #clue-wrapper {
-        flex-direction: column !important; /* AcrossとDownを縦に並べる */
-        flex: 0 0 200px; /* リストの横幅を200pxに固定して、勝手に縮まないようにする */
-  margin-left: auto !important; /* 強制的に右端へ押し出します */
-  text-align: left; /* テキスト自体は左寄せ */
-      }
-
-      /* パズルが18cm以下の時：リストを下に縦二列 */
-      .layout-bottom {
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100%;
-      }
-      .layout-bottom #clue-wrapper {
-        flex-direction: row !important; /* AcrossとDownを横に並べる */
-        width: 100%;
-        margin-top: 20px;
-        gap: 20px;
-      }
-      .layout-bottom .clue-column {
-  flex: none;     /* 幅を広げない */
-  width: 300px;   /* 1列の幅を固定する（お好みで調整） */
-}
-
+      .layout-side { display: flex !important; flex-direction: row !important; justify-content: space-between !important; width: 100%; }
+      .layout-side #grid-container { flex-shrink: 0 !important; }
+      .layout-side #clue-wrapper { flex-direction: column !important; flex: 0 0 200px; margin-left: auto !important; text-align: left; }
+      .layout-bottom { display: flex !important; flex-direction: column !important; width: 100%; }
+      .layout-bottom #clue-wrapper { flex-direction: row !important; width: 100%; margin-top: 20px; gap: 20px; }
+      .layout-bottom .clue-column { flex: none; width: 300px; }
       #clue-wrapper { border: none !important; padding-left: 5px; }
-
-      /* リスト行間 0.1rem */
-      .clue-item { 
-        font-size: 16px; line-height: 1.1; 
-        margin-bottom: 0.1rem !important; 
-      }
+      .clue-item { font-size: 16px; line-height: 1.1; margin-bottom: 0.1rem !important; }
       h3 { font-size: 14px; margin-bottom: 4px; font-weight: bold; }
     }
   </style>
@@ -202,6 +105,7 @@
 </div>
 
 <script>
+// 画像のリストに基づいた単語データ
 const data = [
     { en: "restaurant", ja: "レストラン" },
     { en: "food", ja: "食べ物" },
@@ -219,7 +123,7 @@ const data = [
     { en: "weekend", ja: "週末" },
     { en: "history", ja: "歴史" },
     { en: "meeting", ja: "会議" }
-  ];
+];
 
 const SIZE = 50;
 let grid, placed;
@@ -251,7 +155,7 @@ function canPlace(word, r, c, dir) {
 function setup() {
   let attempts = 0;
   let success = false;
-  while (!success && attempts < 100) {
+  while (!success && attempts < 200) {
     attempts++;
     grid = Array.from({ length: SIZE }, () => Array(SIZE).fill(null));
     placed = [];
@@ -309,25 +213,17 @@ function render() {
       let td = tr.insertCell();
       let char = grid[r][c];
       if (char) {
-        if (char === ' ') {
-          td.className = 'active gray-cell';
-          td.innerHTML = `<input disabled value="" tabindex="-1">`;
-        } else {
-          td.className = 'active';
-          td.innerHTML = `<input data-ans="${char}" maxlength="1" spellcheck="false" oninput="this.value = this.value.toLowerCase()">`;
-        }
+        td.className = 'active';
+        td.innerHTML = `<input data-ans="${char}" maxlength="1" spellcheck="false" oninput="this.value = this.value.toLowerCase()">`;
         let start = placed.find(p => p.r === r && p.c === c);
         if (start) td.innerHTML += `<span class="num">${getNum(r, c)}</span>`;
       } else { td.className = 'empty'; }
     }
   }
 
-  // --- レイアウトの自動判定ロジック ---
   const wrapper = document.getElementById('main-wrapper');
-  // 1cmを37.8pxとして計算（96dpiの場合）。21cmは794px。
-  // 印刷時の物理サイズを基準にするため、テーブルの実際の高さをチェック
   const tableHeightPx = table.offsetHeight;
-  const thresholdPx = 21 * 37.8; // 21cm
+  const thresholdPx = 21 * 37.8; 
 
   if (tableHeightPx > thresholdPx) {
     wrapper.classList.add('layout-side');
